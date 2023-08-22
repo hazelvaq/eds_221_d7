@@ -1,0 +1,120 @@
+---
+title: "Day7"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(dplyr)
+
+```
+
+## Relational data
+
+Def: Collections of data tables that are related to one another
+
+How do we use them: Relational database management systems(RDBMS) are queries using SQL - database management systems
+
+To combine(join) information from different tables for our anlyses
+
+-   Mutating: add new variables to one data frame
+
+-   Filtering: filter observation from one data frame from matching observations in the other table
+
+Key: variable that stores unique information that can be used to connect information across data set (EX: ID, coordinates, etc.)
+
+[**Full join: everything from both data frames is retained, regardless of whether or not it has a match in the data frame its being join to**]{.underline} **--- is the safest route because you could just filter in the end**
+
+`{r} full_join(x,y, y = "z")}`
+
+[**Left join table: Everything in X(left table). Things from Y(right table) that have a matching key in X are joined to it. Things in Y that do not have a matching key in X are dropped.**]{.underline} **EX(camp grounds available and camp grounds)**
+
+`{r} left_join(x,y,by = "z")}`
+
+[**Inner Join: Only keep stuff if they have a key match in X and Y**]{.underline}
+
+`{r} inner_join(x,y, by = "z")}`
+
+## Interactive Session
+
+#### Data Wrangling refresher
+
+Starting from penguins, write a single piped sequence in which you:
+
+1.  Only include penguins at Dream and Biscoe Islands
+
+2.  Remove the year and sex variables
+
+3.  Add a new column body_max_kg with penguins mass converted from g to kg
+
+4.  Rename the island variable to location
+
+    ```{r}
+    # penguins %>% filter(island == "Dream" | island == "Biscoe") write in a better way
+    penguins %>% filter(island %in% c("Dream","Biscoe")) %>% 
+      select(-year,-sex) %>% 
+      mutate(body_mass_kg = body_mass_g/1000) %>% 
+      rename(location = island)
+      
+    ```
+
+<!-- -->
+
+2.  Starting from penguins, write a single piped sequence to:
+
+-   limit to adelie penguins
+
+-   remove any observations where flipper_length_mm is NA(!is.na()) or drop_na
+
+-   group the data by sex
+
+-   create a summary table that contains the mean, sd, and sample size of flipper length for male and female Adelie penguins
+
+```{r}
+penguins %>% filter(species == "Adelie") %>% 
+  drop_na(flipper_length_mm, sex) %>% 
+  group_by(sex) %>% 
+  summarize(mean_length = mean(flipper_length_mm),
+            sd_length = sd(flipper_length_mm),
+            sample_size =n())
+```
+
+The use of count
+
+```{r}
+### These two are equivelant
+penguins %>% group_by(species, island, sex) %>% 
+  summarize(sample_size = n())
+
+# Count is just wrapping togetehr group_by + summarize +n() to get counts of observation. Use this when you just want to know how many there are and not really grouping
+penguins %>% count(species,island,sex)
+```
+
+## Copying table text and import to R
+
+1.  Copy table
+
+2.  Add new R code chunk
+
+3.  Addins: paste as data.frame
+
+```{r}
+animals <- data.frame(
+  stringsAsFactors = FALSE,
+          location = c("lagoon", "bluff", "creek", "oaks", "bluff"),
+           species = c("bobcat", "coyote", "fox", "squirrel", "bobcat"),
+          maturity = c("adult", "juvenile", "adult", "juvenile", "adult")
+)
+```
+
+```{r}
+sites <- data.frame(
+  stringsAsFactors = FALSE,
+          location = c("beach", "lagoon", "bluff", "oaks"),
+    full_site_name = c("Goleta Beach","UCSB Lagoon",
+                       "Ellwood Mesa","Fremont Campground"),
+      jurisdiction = c("SB City", "UCSB", "SB City", "USFS")
+)
+```
