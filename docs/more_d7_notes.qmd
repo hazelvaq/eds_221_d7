@@ -192,3 +192,163 @@ str_detect()
 # Replace a string pattern with something else
 str_replace()
 ```
+
+## Date Times with lubridate()
+
+ymd: If the date is year-month-day
+
+mdy: month-day-year
+
+dmy: day-month-year
+
+```{r}
+#month day year
+my_date_1 <-lubridate::mdy("03-15-1998")
+class(my_date_1)
+
+#same other elements seperated with a slash
+my_day_2 <-lubridate::mdy("11/7/2023")
+my_day_2
+
+# character representation
+my_day_3 <- lubridate::dmy("08-Jun-1974")
+my_day_3
+
+#ymd
+mydate_4 <- lubridate::ymd(19740723)
+mydate_4
+
+#Can we break the lubridate function
+my_date_5 <- lubridate::mdy("06-20-2001")
+my_date_5
+```
+
+### Adding times to our dates
+
+```{r}
+time_1 <- lubridate::ymd_hm("2020-08-12 11:18")
+time_1
+```
+
+### Parse June 2, 1982 at 4pm UTC (16:00) as a date in R.
+
+```{r}
+time_2 <- lubridate::mdy_h("June 2, 1984 4pm") 
+time_2
+```
+
+Time zones
+
+```{r}
+with_tz(time_2,"America/New_York")
+
+time_3 <- lubridate::mdy_hm("May 12, 1998 5:56pm")
+with_tz(time_3,"America/New_York")
+
+# what time is it at a certain time zone
+now<- with_tz(Sys.time(),"Europe/Belgrade")
+now
+```
+
+### Access different parts of date-times
+
+```{r}
+# class: "POSIXct" "POSIXt"
+class(now)
+
+##pull the day
+lubridate::day(now)
+
+## week
+lubridate::week(now)
+
+## hour
+lubridate::hour(now)
+
+## min
+lubridate::minute(now)
+
+## sec
+lubridate::second(now)
+
+## year
+lubridate::year(now)
+```
+
+Data frame
+
+```{r}
+urchin_counts <- data.frame(
+  date = c("Oct 12, 2004","Oct 18, 2007", "Feb 12, 2003","Feb 14, 2008"),
+  species = c("purple","red","red","white"),
+  size_mm = c(19,24,18,11)
+)
+
+```
+
+```{r}
+urchin_mean_by_month <- urchin_counts %>% 
+  mutate(date = lubridate::mdy(date)) %>% 
+    # Add a new column month that only contains the month number from date
+  mutate(month = lubridate::month(date)) %>% 
+  group_by(month) %>% 
+  summarize(mean_size = mean(size_mm))
+```
+
+## Strings with stringr 
+
+#### Use str_detect to detect a string patter
+
+```{r}
+my_string <- "Charmy loves to nap and soft things and tuna"
+
+str_detect(my_string, pattern = "tuna")
+
+str_detect(my_string,pattern = "hot weather")
+
+# String detect in a vector element by element - is case sensitive
+my_string_2 <- c("burrito","fish taco","TACO salad","pie")
+
+str_detect(my_string_2,"taco")
+```
+
+####  Working with starwars: filter by string detect
+
+```{r}
+starwars %>% 
+  filter(str_detect(name, "Skywalker"))
+
+## Add a columnn that replaces Sky with FIRE
+starwars %>% 
+  mutate(name_new = str_replace(name, pattern = "Sky", replacement = "FIRE"))
+```
+
+### White spaces
+
+str_trim: to get rid of leading and trailing whitespace
+
+str_squish to get rid of leading and trailing whitespace and excess interior white spaces
+
+```{r}
+my_string_3 <- "      Hi my name    is baby charmy!!!!      "
+# Removes the white spaces but it still has excess spaces (one space)
+str_trim(my_string_3)
+# Further remove the spaces
+str_squish(my_string_3)
+
+# lower case
+str_to_lower(my_string_3)
+
+#upper case
+str_to_upper(my_string_3)
+
+#title
+str_to_title(my_string_3)
+
+#sentence
+str_to_sentence(my_string_3)
+
+## Example
+starwars %>% 
+  mutate(species_lower = str_to_lower(species))
+```
