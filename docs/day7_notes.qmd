@@ -1,0 +1,64 @@
+---
+title: "a"
+format: html
+editor: visual
+---
+
+## Relational data
+
+Def: Collections of data tables that are related to one another
+
+How do we use them: Relational database management systems(RDBMS) are queries using SQL - database management systems
+
+To combine(join) information from different tables for our anlyses
+
+-   Mutating: add new variables to one data frame
+
+-   Filtering: filter observation from one data frame from matching observations in the other table
+
+Key: variable that stores unique information that can be used to connect information across data set (EX: ID, coordinates, etc.)
+
+[**Full join: everything from both data frames is retained, regardless of whether or not it has a match in the data frame its being join to**]{.underline} **--- is the safest route because you could just filter in the end**
+
+```{r}
+full_join(x,y, y = "z")
+```
+
+[**Left join table: Everything in X(left table). Things from Y(right table) that have a matching key in X are joined to it. Things in Y that do not have a matching key in X are dropped.**]{.underline} **EX(camp grounds available and camp grounds)**
+
+```{r}
+left_join(x,y,by = "z")
+```
+
+[**Inner Join: Only keep stuff if they have a key match in X and Y**]{.underline}
+
+```{r}
+inner_join(x,y, by = "z")
+```
+
+## Interactive Session
+
+#### Data Wrangling refresher
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(dplyr)
+```
+
+1.  Starting from penguins, write a single piped sequence in which you:
+    1.  Only include penguins at Dream and Biscoe Islands
+
+        ```{r}
+        penguins %>% filter(island == "Dream" | island == "Biscoe")
+        ```
+
+    2.  Remove the year and sex variables
+
+        ```{r}
+        select(-year,-sex)
+        ```
+
+    3.  Add a new column body_max_kg with penguins mass converted from g to kg
+
+    4.  Rename the island variable to location
