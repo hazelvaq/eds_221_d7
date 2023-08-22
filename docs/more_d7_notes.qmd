@@ -163,3 +163,32 @@ Example: February 18, 1996 at 8:34pm PST
 Example: 12/5/2002 at 2:41am
 
 2002-12-05T02:41-07:00
+
+### Lubridate package
+
+Part of the tidyverse help with dates and time - makes it easier to work with dates
+
+Helps with parsing date-time data quickly and mostly painlessly
+
+Classes of date-time data:
+
+Date: Calender dates. ymd/dmy/mdy
+
+POSIXct: date-time that also includes time zone information. The default is UTC
+
+### Wrangling strings
+
+stringr package: makes working with strings as easy as possible
+
+Easier ways to do things like:
+
+-   Detecting string patterns
+
+-   Replacing string patterns
+
+```{r}
+# is the pattern detected?(TRUE/FALSE)
+str_detect()
+# Replace a string pattern with something else
+str_replace()
+```
