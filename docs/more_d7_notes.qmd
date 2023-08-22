@@ -118,3 +118,48 @@ sites <- data.frame(
       jurisdiction = c("SB City", "UCSB", "SB City", "USFS")
 )
 ```
+
+#### Joins
+
+Full join
+
+```{r}
+#X = left table, Y = right table
+full_join_example <- full_join(animals,sites)
+
+# left_join will only keep what is present in the left table
+left_join_example <- left_join(animals,sites)
+
+# inner_join() this will return what is present in both based on the key only
+# observations where there is a matching variable 
+
+inner_join_example <- inner_join(animals,sites)
+
+## for multiple keys you can include in the join function (by = join_by(location)) in this case location
+```
+
+### Data Wrangling continued dates & times, string wrangling
+
+ISO 8601: standard for representing dates and times
+
+YYYY-MM-DD order 2018-03-07
+
+If you have more
+
+TZD(time zone designator: indicate how far ahead/behind a time zone UTC)
+
+Thh: 2 digit hour (00 through 23)
+
+Full date + hours + minutes + seconds: YYYY-MM-DDThh:mmssTZD
+
+EX: 9:07am on June 8th, 2016 in Perth, Australia (UTC +8)
+
+2016-06-08T09999:07+08:00
+
+Example: February 18, 1996 at 8:34pm PST
+
+1996-02-1888T08:34-07:00
+
+Example: 12/5/2002 at 2:41am
+
+2002-12-05T02:41-07:00
